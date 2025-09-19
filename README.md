@@ -6,7 +6,7 @@ back-archive - Create backup of files or directories.
 * Open terminal and run the following commands:
 
   ```shell
-  $ git clone https://github.com/q3aql/back-archive
+  $ git clone https://github.com/asdo92/back-archive
   $ cd back-archive
   $ sudo ./install.sh
   ````
