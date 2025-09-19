@@ -51,8 +51,8 @@ function showAbout() {
   echo "* About:"
   echo ""
   echo " - Software: back-archive ${VERSION} (${M_DATE})"
-  echo " - Author: q3aql"
-  echo " - Contact: q3aql@protonmail.ch"
+  echo " - Author: asdo92"
+  echo " - Contact: asdo92@duck.com"
   echo " - License: ${LICENSE}"
   echo ""
 }
