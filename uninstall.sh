@@ -3,8 +3,8 @@
 ###############################################
 # back-archive - Uninstaller for back-archive #
 # Date: 15-05-2021                            #
-# Author: asdo92                              #
-# Contact: asdo92@duck.com                    #
+# Author: dmesg00                              #
+# Contact: dmesg00@duck.com                    #
 ###############################################
 VERSION="1.0"
 M_DATE="150521"

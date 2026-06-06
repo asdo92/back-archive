@@ -3,8 +3,8 @@
 ########################################################
 # back-archive - Create backup of files or directories #
 # Date: 15-05-2021                                     #
-# Author: asdo92                                       #
-# Contact: asdo92@duck.com                             #
+# Author: dmesg00                                       #
+# Contact: dmesg00@duck.com                             #
 ########################################################
 VERSION="1.0"
 M_DATE="150521"
@@ -51,8 +51,8 @@ function showAbout() {
   echo "* About:"
   echo ""
   echo " - Software: back-archive ${VERSION} (${M_DATE})"
-  echo " - Author: asdo92"
-  echo " - Contact: asdo92@duck.com"
+  echo " - Author: dmesg00"
+  echo " - Contact: dmesg00@duck.com"
   echo " - License: ${LICENSE}"
   echo ""
 }
