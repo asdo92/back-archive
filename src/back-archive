@@ -1,13 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 ########################################################
 # back-archive - Create backup of files or directories #
-# Date: 15-05-2021                                     #
-# Author: dmesg00                                       #
-# Contact: dmesg00@duck.com                             #
+# Date: 16-08-2026                                     #
+# Author: dmesg00                                      #
+# Contact: dmesg00@duck.com                            #
 ########################################################
+setopt SH_WORD_SPLIT NO_NOMATCH
 VERSION="1.0"
-M_DATE="150521"
+M_DATE="160826"
 LICENSE="GPL v2.0"
 
 # Global parameters.
@@ -29,10 +30,10 @@ mkdir -p ${bckDir}
 mkdir -p ${logDir}
 
 # Function to check root permissions.
-function rootMessage() {
+rootMessage() {
   mkdir -p /etc/root &> /dev/null
   administrador="$?"
-  if [ ${administrador} -eq 0 ] ; then
+  if (( ${administrador} == 0 )) ; then
     rm -rf /etc/root
   else
     echo ""
@@ -46,7 +47,7 @@ function rootMessage() {
 
 # Function to show about.
 # Syntax: showAbout
-function showAbout() {
+showAbout() {
   echo ""
   echo "* About:"
   echo ""
@@ -59,7 +60,7 @@ function showAbout() {
 
 # Function to show help.
 # Syntax: showHelp
-function showHelp() {
+showHelp() {
   echo ""
   echo "* back-archive v${VERSION} (${M_DATE}) (${LICENSE})"
   echo ""
@@ -87,13 +88,13 @@ function showHelp() {
 
 # Function to create backup config.
 # Syntax: createBackup <name-backup>
-function createBackup() {
+createBackup() {
   num_default_backups="3"
   name_backup="${1}"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       echo ""
       echo "* back-archive v${VERSION} (${M_DATE})"
       echo ""
@@ -110,7 +111,7 @@ function createBackup() {
       echo -n "+ [Default: ${num_default_backups}] Type maximum number of backups: " ; read num_backups
       echo -n "+ Type absolute path dir or file to backup: " ; read dir_backups
       echo ""
-      if [ -z "${num_backups}" ] ; then
+      if [[ -z "${num_backups}" ]] ; then
         num_backups=${num_default_backups}
       fi
       echo "* Created backup configuration:"
@@ -139,12 +140,12 @@ function createBackup() {
 
 # Function to show backup config.
 # Syntax: showBackup <name-backup>
-function showBackup() {
+showBackup() {
   name_backup="${1}"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       source "${confDir}/${name_backup}"
       echo ""
       echo "* back-archive v${VERSION} (${M_DATE})"
@@ -154,13 +155,13 @@ function showBackup() {
       echo "- Max number of backups: ${MAX_BCK}"
       echo ""
       echo -n "* [Default: n] Show the backup files created? (y/n): " ; read list_created
-      if [ "${list_created}" == "y" ] ; then
+      if [[ "${list_created}" == "y" ]] ; then
         echo ""
         echo "* List of backup files:"
         echo ""
         cd "${bckDir}"
         list_backup_files=$(ls -1 ${name_backup}-????-??-??.tar.xz 2>/dev/null)
-        if [ -z "${list_backup_files}" ] ; then
+        if [[ -z "${list_backup_files}" ]] ; then
           echo " + No backup files"
         else
           for files in ${list_backup_files} ; do
@@ -181,12 +182,12 @@ function showBackup() {
 
 # Function to edit backup config.
 # Syntax: editBackup <name-backup>
-function editBackup() {
+editBackup() {
   name_backup="${1}"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       source "${confDir}/${name_backup}"
       num_default_backups="${MAX_BCK}"
       dir_default_backups="${PATH_DIR}"
@@ -200,10 +201,10 @@ function editBackup() {
       echo -n "+ [Current: ${num_default_backups}] Type maximum number of backups: " ; read num_backups
       echo -n "+ [Current: ${dir_default_backups}] Type absolute path dir or file to backup: " ; read dir_backups
       echo ""
-      if [ -z "${num_backups}" ] ; then
+      if [[ -z "${num_backups}" ]] ; then
         num_backups=${num_default_backups}
       fi
-      if [ -z "${dir_backups}" ] ; then
+      if [[ -z "${dir_backups}" ]] ; then
         dir_backups=${dir_default_backups}
       fi
       echo "* Edited backup configuration:"
@@ -238,13 +239,13 @@ function editBackup() {
 
 # Function to delete backup config.
 # Syntax: deleteBackup <name-backup>
-function deleteBackup() {
+deleteBackup() {
   name_backup="${1}"
   delete_default_backup="n"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       source "${confDir}/${name_backup}"
       echo ""
       echo "* back-archive v${VERSION} (${M_DATE})"
@@ -255,10 +256,10 @@ function deleteBackup() {
       echo "- Backup files: ${bckDir}/${name_backup}-YYYY-MM-DD.tar.xz"
       echo ""
       echo -n "* [Default: ${delete_default_backup}] Do you really want to delete it? (y/n): " ; read delete_backup
-      if [ -z "${delete_backup}" ] ; then
+      if [[ -z "${delete_backup}" ]] ; then
         delete_backup="${delete_default_backup}"
       fi
-      if [ "${delete_backup}" == "y" ] ; then
+      if [[ "${delete_backup}" == "y" ]] ; then
         echo ""
         rm -rf "${confDir}/${name_backup}"
         echo "+ Deleted config file ${confDir}/${name_backup}"
@@ -267,7 +268,7 @@ function deleteBackup() {
         rm -rf "${bckDir}/${name_backup}-????-??-??.tar.xz"
         cd "${bckDir}"
         list_backup_files=$(ls -1 ${name_backup}-????-??-??.tar.xz 2>/dev/null)
-        if [ -z "${list_backup_files}" ] ; then
+        if [[ -z "${list_backup_files}" ]] ; then
           echo "+ Deleted backup files ${bckDir}/${name_backup}-YYYY-MM-DD.tar.xz"
         else
           for files in ${list_backup_files} ; do
@@ -289,12 +290,12 @@ function deleteBackup() {
 
 # Function to show log file of backup config.
 # Syntax: logBackup <name-backup>
-function logBackup() {
+logBackup() {
   name_backup="${1}"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       source "${confDir}/${name_backup}"
       echo ""
       echo "* back-archive v${VERSION} (${M_DATE})"
@@ -317,25 +318,25 @@ function logBackup() {
 
 # Function to restore files from backup file.
 # Syntax: restoreBackup <name-backup>
-function restoreBackup() {
+restoreBackup() {
   name_backup="${1}"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       source "${confDir}/${name_backup}"
       echo ""
       echo "* back-archive v${VERSION} (${M_DATE})"
       echo ""
       cd "${bckDir}"
       restore_files=$(ls -1 ${name_backup}-????-??-??.tar.xz 2>/dev/null)
-      if [ -z "${restore_files}" ] ; then
+      if [[ -z "${restore_files}" ]] ; then
         echo "* There are no files to restore yet."
         echo ""
       else
         restore_last_file=$(ls -1 ${name_backup}-????-??-??.tar.xz | tail -1)
         echo -n "* [Default: n] Restore from ${restore_last_file}? (y/n): " ; read restore
-        if [ "${restore}" == "y" ] ; then
+        if [[ "${restore}" == "y" ]] ; then
           echo ""
           current_date=$(date +%Y-%m-%d)
           current_time=$(date +%H:%M)
@@ -345,7 +346,7 @@ function restoreBackup() {
           errors="$?"
           current_date=$(date +%Y-%m-%d)
           current_time=$(date +%H:%M)
-          if [ "${errors}" == "0" ] ; then
+          if (( ${errors} == 0 )) ; then
             echo "+ [${current_date}]-[${current_time}] Restoration from file ${restore_last_file} completed." >> "${logDir}/${name_backup}.log"
             echo "* Restoration from file ${restore_last_file} completed."
             echo ""
@@ -372,14 +373,14 @@ function restoreBackup() {
 
 # Function to restore files from backup file without ask.
 # Syntax: restoreBackupWithoutAsk <name-backup>
-function restoreBackupWithoutAsk() {
+restoreBackupWithoutAsk() {
   name_backup="${1}"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       restore_files=$(ls -1 ${name_backup}-????-??-??.tar.xz 2>/dev/null)
-      if [ -z "${restore_files}" ] ; then
+      if [[ -z "${restore_files}" ]] ; then
         echo "null" > /dev/null
       else
         restore_last_file=$(ls -1 ${name_backup}-????-??-??.tar.xz | tail -1)
@@ -391,7 +392,7 @@ function restoreBackupWithoutAsk() {
         errors="$?"
         current_date=$(date +%Y-%m-%d)
         current_time=$(date +%H:%M)
-        if [ "${errors}" == "0" ] ; then
+        if (( ${errors} == 0 )) ; then
           echo "+ [${current_date}]-[${current_time}] Restoration from file ${restore_last_file} completed." >> "${logDir}/${name_backup}.log"
           echo "* Restoration from file ${restore_last_file} completed."
           echo ""
@@ -413,12 +414,12 @@ function restoreBackupWithoutAsk() {
 
 # Function to create backup file from config.
 # Syntax: runBackup <name-backup>
-function runBackup() {
+runBackup() {
   name_backup="${1}"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       source "${confDir}/${name_backup}"
       echo ""
       echo "* back-archive v${VERSION} (${M_DATE})"
@@ -442,7 +443,7 @@ function runBackup() {
       errors="$?"
       current_date=$(date +%Y-%m-%d)
       current_time=$(date +%H:%M)
-      if [ "${errors}" == "0" ] ; then
+      if (( ${errors} == 0 )) ; then
         echo "+ [${current_date}]-[${current_time}] Backup file ${name_backup}-${current_date}.tar.xz created successfully." >> "${logDir}/${name_backup}.log"
         echo "* Backup file ${name_backup}-${current_date}.tar.xz created successfully."
         cat "${logDir}/${name_backup}.log" | tail -${num_max_log_lines} > "${dirTempFile}"
@@ -455,7 +456,7 @@ function runBackup() {
         cat "${dirTempFile}" > "${logDir}/${name_backup}.log"
       fi
       num_current_files=$(ls -1 ${name_backup}-????-??-??.tar.xz | wc -l)
-      if [ ${num_current_files} -le ${MAX_BCK} ] ; then
+      if (( ${num_current_files} <= ${MAX_BCK} )) ; then
         echo "null" > /dev/null
       else
         files_to_delete=$(expr ${num_current_files} - ${MAX_BCK})
@@ -483,12 +484,12 @@ function runBackup() {
 
 # Function to create backup file from config.
 # Syntax: runBackupWithoutMessages <name-backup>
-function runBackupWithoutMessages() {
+runBackupWithoutMessages() {
   name_backup="${1}"
-  if [ -z "${1}" ] ; then
+  if [[ -z "${1}" ]] ; then
     showHelp
   else
-    if [ -f "${confDir}/${name_backup}" ] ; then
+    if [[ -f "${confDir}/${name_backup}" ]] ; then
       source "${confDir}/${name_backup}"
       cd "${bckDir}"
       current_date=$(date +%Y-%m-%d)
@@ -509,7 +510,7 @@ function runBackupWithoutMessages() {
       errors="$?"
       current_date=$(date +%Y-%m-%d)
       current_time=$(date +%H:%M)
-      if [ "${errors}" == "0" ] ; then
+      if (( ${errors} == 0 )) ; then
         echo "+ [${current_date}]-[${current_time}] Backup file ${name_backup}-${current_date}.tar.xz created successfully." >> "${logDir}/${name_backup}.log"
         echo "* Backup file ${name_backup}-${current_date}.tar.xz created successfully."
         cat "${logDir}/${name_backup}.log" | tail -${num_max_log_lines} > "${dirTempFile}"
@@ -522,7 +523,7 @@ function runBackupWithoutMessages() {
         cat "${dirTempFile}" > "${logDir}/${name_backup}.log"
       fi
       num_current_files=$(ls -1 ${name_backup}-????-??-??.tar.xz | wc -l)
-      if [ ${num_current_files} -le ${MAX_BCK} ] ; then
+      if (( ${num_current_files} <= ${MAX_BCK} )) ; then
         echo "null" > /dev/null
       else
         files_to_delete=$(expr ${num_current_files} - ${MAX_BCK})
@@ -546,14 +547,14 @@ function runBackupWithoutMessages() {
 
 # Function to create all backup files.
 # Syntax: runAllBackups
-function runAllBackups() {
+runAllBackups() {
   echo ""
   echo "* back-archive v${VERSION} (${M_DATE})"
   echo ""
   echo "* List of config for backups:"
   echo ""
   list_config_files=$(ls -1 ${confDir})
-  if [ -z "${list_config_files}" ] ; then
+  if [[ -z "${list_config_files}" ]] ; then
     echo " + No config files available yet."
     echo ""
   else
@@ -569,25 +570,25 @@ function runAllBackups() {
 
 # Function to restore from all backup files.
 # Syntax: restoreAllBackups
-function restoreAllBackups() {
+restoreAllBackups() {
   echo ""
   echo "* back-archive v${VERSION} (${M_DATE})"
   echo ""
   echo "* List of files for restore:"
   echo ""
   list_config_files=$(ls -1 ${confDir})
-  if [ -z "${list_config_files}" ] ; then
+  if [[ -z "${list_config_files}" ]] ; then
     echo " + No backup files to restore."
   else
     list_backup_files=$(ls -1 ${bckDir} 2>/dev/null)
-    if [ -z "${list_backup_files}" ] ; then
+    if [[ -z "${list_backup_files}" ]] ; then
       echo " + No backup files to restore."
       echo ""
     else
       for files in ${list_config_files} ; do
         cd "${bckDir}"
         restore_last_file=$(ls -1 ${files}-????-??-??.tar.xz | tail -1 2>/dev/null)
-        if [ -z "${restore_last_file}" ] ; then
+        if [[ -z "${restore_last_file}" ]] ; then
           echo "null" > /dev/null
         else
           echo " + ${restore_last_file}"
@@ -595,7 +596,7 @@ function restoreAllBackups() {
       done
       echo ""
       echo -n "* [Default: n] Restore from all backups? (y/n): " ; read restore_all
-      if [ "${restore_all}" == "y" ] ; then
+      if [[ "${restore_all}" == "y" ]] ; then
         echo ""
         for files in ${list_config_files} ; do
           restoreBackupWithoutAsk "${files}"
@@ -607,14 +608,14 @@ function restoreAllBackups() {
 
 # Function to list all config files.
 # Syntax: listConfigBackup
-function listConfigBackup() {
+listConfigBackup() {
   echo ""
   echo "* back-archive v${VERSION} (${M_DATE})"
   echo ""
   echo "* List of configuration files:"
   echo ""
   list_config_files=$(ls -1 ${confDir})
-  if [ -z "${list_config_files}" ] ; then
+  if [[ -z "${list_config_files}" ]] ; then
     echo " + No configuration files"
   else
     for files in ${list_config_files} ; do
@@ -626,14 +627,14 @@ function listConfigBackup() {
 
 # Function to list all backup files.
 # Syntax: listBackups
-function listBackups() {
+listBackups() {
   echo ""
   echo "* back-archive v${VERSION} (${M_DATE})"
   echo ""
   echo "* List of backup files:"
   echo ""
   list_backup_files=$(ls -1 ${bckDir} 2>/dev/null)
-  if [ -z "${list_backup_files}" ] ; then
+  if [[ -z "${list_backup_files}" ]] ; then
     echo " + No backup files"
   else
     for files in ${list_backup_files} ; do
@@ -646,41 +647,41 @@ function listBackups() {
 # Run syntax
 rootMessage
 rm -rf ${dirTempFile}
-if [ "${1}" == "-new" ] ; then
+if [[ "${1}" == "-new" ]] ; then
   createBackup "${2}"
-elif [ "${1}" == "-shw" ] ; then
+elif [[ "${1}" == "-shw" ]] ; then
   showBackup "${2}"
-elif [ "${1}" == "-show" ] ; then
+elif [[ "${1}" == "-show" ]] ; then
   showBackup "${2}"
-elif [ "${1}" == "-edt" ] ; then
+elif [[ "${1}" == "-edt" ]] ; then
   editBackup "${2}"
-elif [ "${1}" == "-edit" ] ; then
+elif [[ "${1}" == "-edit" ]] ; then
   editBackup "${2}"
-elif [ "${1}" == "-del" ] ; then
+elif [[ "${1}" == "-del" ]] ; then
   deleteBackup "${2}"
-elif [ "${1}" == "-delete" ] ; then
+elif [[ "${1}" == "-delete" ]] ; then
   deleteBackup "${2}"
-elif [ "${1}" == "-log" ] ; then
+elif [[ "${1}" == "-log" ]] ; then
   logBackup "${2}"
-elif [ "${1}" == "-bck" ] ; then
+elif [[ "${1}" == "-bck" ]] ; then
   restoreBackup "${2}"
-elif [ "${1}" == "-backup" ] ; then
+elif [[ "${1}" == "-backup" ]] ; then
   restoreBackup "${2}"
-elif [ "${1}" == "-run" ] ; then
+elif [[ "${1}" == "-run" ]] ; then
   runBackup "${2}"
-elif [ "${1}" == "-run-all" ] ; then
+elif [[ "${1}" == "-run-all" ]] ; then
   runAllBackups
-elif [ "${1}" == "-bck-all" ] ; then
+elif [[ "${1}" == "-bck-all" ]] ; then
   restoreAllBackups
-elif [ "${1}" == "-backup-all" ] ; then
+elif [[ "${1}" == "-backup-all" ]] ; then
   restoreAllBackups
-elif [ "${1}" == "-list" ] ; then
+elif [[ "${1}" == "-list" ]] ; then
   listConfigBackup
-elif [ "${1}" == "-list-bck" ] ; then
+elif [[ "${1}" == "-list-bck" ]] ; then
   listBackups
-elif [ "${1}" == "-help" ] ; then
+elif [[ "${1}" == "-help" ]] ; then
   showHelp
-elif [ "${1}" == "-about" ] ; then
+elif [[ "${1}" == "-about" ]] ; then
   showAbout
 else
   showHelp
