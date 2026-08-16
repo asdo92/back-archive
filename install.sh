@@ -57,6 +57,7 @@ mkdir -p "${install_path}/archive"
 echo "+ Created backups directory (${install_path}/archive)."
 # Copy executable of back-archive
 cp -rf src/back-archive "${install_path}"/
+cp -rf man/back-archive.1 /usr/share/man/man1/
 chmod +x "${install_path}/back-archive"
 echo "+ Copied executable to ${install_path}/back-archive."
 # Create executable on system path
