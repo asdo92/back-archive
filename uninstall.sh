@@ -2,22 +2,23 @@
 
 ###############################################
 # back-archive - Uninstaller for back-archive #
-# Date: 15-05-2021                            #
-# Author: dmesg00                              #
-# Contact: dmesg00@duck.com                    #
+# Date: 16-08-2026                            #
+# Author: dmesg00                             #
+# Contact: dmesg00@duck.com                   #
 ###############################################
+setopt SH_WORD_SPLIT NO_NOMATCH
 VERSION="1.0"
-M_DATE="150521"
+M_DATE="160826"
 LICENSE="GPL v2.0"
 
 # Default parameters
 default_install_path="/opt/back-archive"
 
 # Function to check root permissions.
-function rootMessage() {
+rootMessage() {
   mkdir -p /etc/root &> /dev/null
   administrador="$?"
-  if [ ${administrador} -eq 0 ] ; then
+  if (( ${administrador} -eq 0 )) ; then
     rm -rf /etc/root
   else
     echo ""
@@ -31,7 +32,7 @@ function rootMessage() {
 
 # Detect previous installation
 rootMessage
-if [ -f "/usr/bin/back-archive" ] ; then
+if [[ -f "/usr/bin/back-archive" ]] ; then
   source "/usr/bin/back-archive"
   baseDir="${RUN_DIR}"
   confDir="${baseDir}/conf"
@@ -50,7 +51,7 @@ if [ -f "/usr/bin/back-archive" ] ; then
   echo " - Run file: ${baseDir}/back-archive"
   echo ""
   echo -n "* [Default: n] Proceed with the uninstallation? (y/n): " ; read uninstall
-  if [ "${uninstall}" == "y" ] ; then
+  if [[ "${uninstall}" == "y" ]] ; then
     echo ""
     rm -rf "${baseDir}/back-archive"
     echo "+ Removed ${baseDir}/back-archive file."
