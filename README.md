@@ -29,7 +29,7 @@ back-archive - Create backup of files or directories.
   + Installation completed.
   ````
 
-_Dependencies: `bash`, `coreutils`, `tar`, `cron (opcional)`, `grep`_
+_Dependencies: `zsh`, `coreutils`, `tar`, `cron (opcional)`, `grep`_
 
 ### Enable Auto-Backups:
 
