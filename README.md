@@ -74,7 +74,7 @@ _Dependencies: `bash`, `coreutils`, `tar`, `cron (opcional)`, `grep`_
 
   * [xterm homepage](https://invisible-island.net/xterm/)
   * [Coreutils homepage](https://www.gnu.org/software/coreutils/coreutils.html)
-  * [Bash homepage](https://www.gnu.org/software/bash/)
+  * [Zsh homepage](https://www.zsh.org/)
   * [Grep homepage](https://www.gnu.org/software/grep/)
 
 
