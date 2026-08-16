@@ -64,6 +64,7 @@ if [[ -f "/usr/bin/back-archive" ]] ; then
     rm -rf "${baseDir}"
     echo "+ Removed ${baseDir} directory."
     rm -rf "/usr/bin/back-archive"
+    rm -rf "/usr/share/man/man1/back-archive.1"
     echo "+ Removed /usr/bin/back-archive redirection."
     echo "+ Uninstall completed."
     echo ""
